@@ -35,27 +35,27 @@ class Database:
         self.connection.commit()
 
     def most_flights(self):
-        self.cursor.execute(f"SELECT tailNumber, COUNT(tailNumber) AS Flights FROM FlightLeg GROUP BY tailNumber "
-                            f"ORDER BY Flights DESC LIMIT 1")
+        self.cursor.execute("SELECT tailNumber, COUNT(tailNumber) AS Flights FROM FlightLeg GROUP BY tailNumber "
+                            "ORDER BY Flights DESC LIMIT 1")
         flights_result = self.cursor.fetchall()
         print(f'\nPlane with tail number {flights_result[0][0]} was the most active and '
               f'made {flights_result[0][1]} flights.')
 
     def most_time_in_the_sky(self):
-        self.cursor.execute(f"SELECT tailNUmber, SUM(flightDuration) AS Time FROM FlightLeg GROUP BY tailNumber "
-                            f"ORDER BY Time DESC LIMIT 1")
+        self.cursor.execute("SELECT tailNUmber, SUM(flightDuration) AS Time FROM FlightLeg GROUP BY tailNumber "
+                            "ORDER BY Time DESC LIMIT 1")
         time_result = self.cursor.fetchall()
         print(f'\nPlane with tail number {time_result[0][0]} had the most time in the sky'
               f' - {time_result[0][1]} minutes.')
 
     def shortest_and_longest_flights(self):
-        self.cursor.execute(f"SELECT * FROM FlightLeg WHERE flightType LIKE 'I' ORDER BY flightDuration DESC LIMIT 1")
+        self.cursor.execute("SELECT * FROM FlightLeg WHERE flightType LIKE 'I' ORDER BY flightDuration DESC LIMIT 1")
         long_int_flight = self.cursor.fetchall()
-        self.cursor.execute(f"SELECT * FROM FlightLeg WHERE flightType LIKE 'I' ORDER BY flightDuration ASC LIMIT 1")
+        self.cursor.execute("SELECT * FROM FlightLeg WHERE flightType LIKE 'I' ORDER BY flightDuration ASC LIMIT 1")
         short_int_flight = self.cursor.fetchall()
-        self.cursor.execute(f"SELECT * FROM FlightLeg WHERE flightType LIKE 'D' ORDER BY flightDuration DESC LIMIT 1")
+        self.cursor.execute("SELECT * FROM FlightLeg WHERE flightType LIKE 'D' ORDER BY flightDuration DESC LIMIT 1")
         long_dom_flight = self.cursor.fetchall()
-        self.cursor.execute(f"SELECT * FROM FlightLeg WHERE flightType LIKE 'D' ORDER BY flightDuration ASC LIMIT 1")
+        self.cursor.execute("SELECT * FROM FlightLeg WHERE flightType LIKE 'D' ORDER BY flightDuration ASC LIMIT 1")
         short_dom_flight = self.cursor.fetchall()
         print(f'\nThe longest international flight was the flight number {long_int_flight[0][0]} that '
               f'took {long_int_flight[0][8]} minutes.')
@@ -67,13 +67,13 @@ class Database:
               f'took {short_dom_flight[0][8]} minutes.')
 
     def invalid_records(self):
-        self.cursor.execute(f"SELECT a.TailNumber, a.id, CASE WHEN ((a.departureTimeUtc > b.departureTimeUtc "
-                            f"AND a.departureTimeUtc < b.landingTimeUtc) OR (a.departureTimeUtc < b.departureTimeUtc "
-                            f"AND a.landingTimeUtc > b.landingTimeUtc) OR (a.landingTimeUtc > b.departureTimeUtc "
-                            f"AND a.landingTimeUtc < b.landingTimeUtc) OR (a.departureTimeUtc > b.departureTimeUtc "
-                            f"AND a.landingTimeUtc < b.landingTimeUtc)) THEN 'Invalid' ELSE 'Valid' END AS isValid "
-                            f"FROM FlightLeg a INNER JOIN FlightLeg b ON a.tailNumber = b.tailNumber WHERE isValid "
-                            f"LIKE 'Invalid'")
+        self.cursor.execute("SELECT a.TailNumber, a.id, CASE WHEN ((a.departureTimeUtc > b.departureTimeUtc "
+                            "AND a.departureTimeUtc < b.landingTimeUtc) OR (a.departureTimeUtc < b.departureTimeUtc "
+                            "AND a.landingTimeUtc > b.landingTimeUtc) OR (a.landingTimeUtc > b.departureTimeUtc "
+                            "AND a.landingTimeUtc < b.landingTimeUtc) OR (a.departureTimeUtc > b.departureTimeUtc "
+                            "AND a.landingTimeUtc < b.landingTimeUtc)) THEN 'Invalid' ELSE 'Valid' END AS isValid "
+                            "FROM FlightLeg a INNER JOIN FlightLeg b ON a.tailNumber = b.tailNumber WHERE isValid "
+                            "LIKE 'Invalid'")
         flights_colliding = self.cursor.fetchall()
         print(f'\nThere are {len(flights_colliding)} invalid records (colliding flights):')
         for each in flights_colliding:
@@ -124,4 +124,4 @@ db = Database('flights.db')
 # db.invalid_records()
 
 # # calling a function that returns the numbers of flights between which there was the shortest time difference
-db.shortest_time_diff()
+# db.shortest_time_diff()
