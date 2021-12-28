@@ -1,0 +1,1 @@
+This script uses sqlite3 to connect to the database to create a new table, insert the data from .csv file and manipulate the data fe. by inserting new columns to the table or getting specific data from the table.
