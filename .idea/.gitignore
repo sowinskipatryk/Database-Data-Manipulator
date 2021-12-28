@@ -1,6 +1,5 @@
 # Default ignored files
 /shelf/
-/workspace.xml
 *.xml
 /Unicommerce.db
-/zadanie_2.iml
+*.iml
